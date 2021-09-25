@@ -1,6 +1,6 @@
-# express-server-scaffold-typescript
+# express-typescript-template
 
-A Scaffolding template based on Express and Typescript that already includes the following common features.
+A template based on Express and Typescript had includes the following common features.
 
 If you have any question, you can submit [issue](https://github.com/weizhiqimail/express-server-scaffold-typescript/issues/new) or [pr](https://github.com/weizhiqimail/express-server-scaffold-typescript/pulls), thank you.
 

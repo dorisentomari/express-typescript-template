@@ -1,11 +1,11 @@
 import express, { Application } from 'express';
 import { parseToNumber } from 'easybus';
 
-import { ControllerInterface } from './types/global.types';
-import { getIPAddress } from './helper/utils';
-import systemService from './service/system.service';
-import GLOBAL_CONFIG from './config/global.config';
-import logger from './helper/logger';
+import { ControllerInterface } from '~src/types/global.types';
+import { getIPAddress } from '~src/helper/utils';
+import logger from '~src/helper/logger';
+import systemService from '~src/service/system.service';
+import GLOBAL_CONFIG from '~src/config/global.config';
 
 export class App {
   public readonly app: Application;

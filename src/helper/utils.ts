@@ -1,19 +1,19 @@
 import os from 'os';
 import fs from 'fs';
-import path from 'path';
 import crypto from 'crypto';
+import { Response } from 'express';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import killPort from 'kill-port';
-import { addDateTime, DateTypeEnum, isObject, formatDateTime } from 'easybus';
+import { addDateTime, DateTypeEnum, isPlainObject, formatDateTime } from 'easybus';
 import { StatusCodes } from 'http-status-codes';
 import { AxiosError } from 'axios';
-import { Response } from 'express';
+import { isArray, ValidationError } from 'class-validator';
 
-import { IJwtSign } from '../modules/user/user.types';
-import { ValidationError } from 'class-validator';
-import { IErrorResponse } from '../types/http.types';
-import logger from './logger';
-import { ILayerRoute, IRouteSet } from '../types/express.types';
+import logger from '~src/helper/logger';
+import paths from '~src/helper/paths';
+import { IJwtSign } from '~src/modules/user/user.types';
+import { IErrorResponse } from '~src/types/http.types';
+import { ILayerRoute, IRouteSet } from '~src/types/express.types';
 
 export function getIPAddress(): string {
   const interfaces = os.networkInterfaces();
@@ -66,7 +66,7 @@ export async function killPort(port: number) {
 
 export function transformToPlainObject(obj: any) {
   const result: any = {};
-  if (isObject(obj)) {
+  if (isPlainObject(obj)) {
     for (let key in obj) {
       if (obj.hasOwnProperty(key)) {
         result[key] = obj[key];
@@ -74,6 +74,18 @@ export function transformToPlainObject(obj: any) {
     }
   }
   return result;
+}
+
+export function forEach(obj: Record<any, any> | Array<any>, cb = (...args): void => {}) {
+  if (isPlainObject(obj)) {
+    Object.keys(obj).forEach((item, index) => {
+      cb(item, index, obj[item]);
+    });
+  } else if (isArray(obj)) {
+    obj.forEach((item, index) => {
+      cb(item, index);
+    });
+  }
 }
 
 export function parseValidateErrors(res: Response, errors: Array<ValidationError>): IErrorResponse {
@@ -108,9 +120,8 @@ export function cutObjectExtraProperties(source: object = {}, target: object = {
 export async function parseAxiosError(error: AxiosError) {
   delete error.request;
   const time = formatDateTime();
-  const axiosErrorDir = path.resolve(__dirname, '../../logs');
   const fileName = `${time}-axios-error.json`;
-  await fs.writeFileSync(`${axiosErrorDir}/${fileName}`, JSON.stringify(error));
+  await fs.writeFileSync(`${paths.appLog}/${fileName}`, JSON.stringify(error));
   logger.axios(`Record Axios Error Success. Written File ${fileName}`);
 }
 
@@ -118,10 +129,9 @@ export function parseExpressLayerRoute(route: ILayerRoute): Array<IRouteSet> {
   const arr: Array<IRouteSet> = [];
   const path = route.path;
   const methods = route.methods;
-  for (let method in methods) {
-    if (methods.hasOwnProperty(method)) {
-      arr.push({ path, method });
-    }
-  }
+
+  forEach(methods, method => {
+    arr.push({ path, method });
+  });
   return arr;
 }

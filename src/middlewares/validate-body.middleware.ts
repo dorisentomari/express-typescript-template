@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer';
 import { validate, ValidationError, ValidatorOptions } from 'class-validator';
 import { StatusCodes } from 'http-status-codes';
 
-import { cutObjectExtraProperties, parseValidateErrors } from '../helper/utils';
+import { cutObjectExtraProperties, parseValidateErrors } from '~src/helper/utils';
 
 export default function validateBody<T>(
   Dto: any,

@@ -1,14 +1,17 @@
 import { Response } from 'express';
 import { formatDateTime, isString } from 'easybus';
-import { IErrorResponse, INormalResponse } from '../types/http.types';
+
+import { IErrorResponse, INormalResponse } from '~src/types/http.types';
 
 export function normalResponse(res: Response, result: INormalResponse | any = {}, status = 200) {
-  if (!result.profile) {
-    result.profile = {};
+  if (!result.pages) {
+    result.pages = {};
   }
+
   if (!result.data) {
     result.data = null;
   }
+
   return res.status(status).json(result);
 }
 
@@ -16,6 +19,7 @@ export function errorResponse(res: Response, errorResponse: IErrorResponse | str
   let path = res.req.path;
 
   let result: IErrorResponse = {};
+
   if (isString(errorResponse)) {
     result.error = errorResponse as string;
     result.path = path;
@@ -27,14 +31,18 @@ export function errorResponse(res: Response, errorResponse: IErrorResponse | str
   if (!result.path) {
     result.path = path;
   }
+
   if (!result.error) {
     result.error = 'Request Error';
   }
+
   if (!result.time) {
     result.time = formatDateTime(new Date());
   }
+
   if (!result.status) {
     result.status = status;
   }
+
   return res.json(status).json(result);
 }

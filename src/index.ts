@@ -1,9 +1,9 @@
-import './helper/initEnv';
+import '~src/helper/initEnv';
 
+import path from 'path';
 import express from 'express';
 import 'express-async-errors';
 import { parseToNumber } from 'easybus';
-import path from 'path';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -11,19 +11,23 @@ import * as Sentry from '@sentry/node';
 import { Severity } from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 
-import { App } from './app';
-import UserController from './modules/user/user.controller';
-import { killPort } from './helper/utils';
-import GLOBAL_CONFIG from './config/global.config';
-import connectMongoDB from './mongodb';
-import loggerMiddleware from './middlewares/logger.middleware';
-import errorHandlerMiddleware from './middlewares/error-handler.middleware';
-import logger from './helper/logger';
-import notFoundMiddleware from './middlewares/not-found.middleware';
+import { App } from '~src/app';
+import { killPort } from '~src/helper/utils';
+import GLOBAL_CONFIG from '~src/config/global.config';
+import connectMongoDB from '~src/mongodb';
+
+import logger from '~src/helper/logger';
+import UserController from '~src/modules/user/user.controller';
+import errorHandlerMiddleware from '~src/middlewares/error-handler.middleware';
+import loggerMiddleware from '~src/middlewares/logger.middleware';
+import notFoundMiddleware from '~src/middlewares/not-found.middleware';
+import paths from '~src/helper/paths';
 
 async function bootstrap() {
   const port = parseToNumber(process.env.PORT || GLOBAL_CONFIG.PORT);
+
   await killPort(port);
+
   logger.watch(`had kill port ${port}`);
 
   await connectMongoDB();
@@ -31,6 +35,8 @@ async function bootstrap() {
   const server = new App([new UserController()]);
 
   const app = server.app;
+
+  app.use(loggerMiddleware.normalLogger);
 
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -58,11 +64,9 @@ async function bootstrap() {
 
   app.use(morgan(GLOBAL_CONFIG.MORGAN_FORMAT));
 
-  app.use(loggerMiddleware.normalLogger);
+  app.use(express.static(paths.appPublic));
 
-  app.use(express.static(path.resolve(__dirname, '../assets')));
-
-  app.use(express.static(path.resolve(__dirname, '../public')));
+  app.use(express.static(paths.appAssets));
 
   app.use(helmet.permittedCrossDomainPolicies({ permittedPolicies: 'none' }));
 

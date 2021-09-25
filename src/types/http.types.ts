@@ -29,7 +29,7 @@ export type IResponseCodeProps<T> = { [key in keyof typeof IResponseCode]: T };
 
 export interface INormalResponse {
   data?: any;
-  profile?: {
+  pages?: {
     page?: number;
     pageSize?: number;
     total?: number;

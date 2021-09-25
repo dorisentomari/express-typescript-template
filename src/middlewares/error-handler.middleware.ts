@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { formatDateTime } from 'easybus';
 
-import { RESPONSE_CODE } from '../config/response-code.config';
-import { IErrorResponse } from '../types/http.types';
+import { RESPONSE_CODE } from '~src/config/response-code.config';
+import { IErrorResponse } from '~src/types/http.types';
 
 const { SERVER_ERROR } = RESPONSE_CODE;
 

@@ -1,7 +1,7 @@
-import { IsEmail, Length, IsOptional } from 'class-validator';
+import { IsEmail, Length } from 'class-validator';
 
 import USER_DTO_ERROR from './user.dto.error';
-import IsMatchCustom from '../../validator/is-match.custom';
+import IsMatchCustom from '~src/validator/is-match.custom';
 
 const { EMAIL, PASSWORD } = USER_DTO_ERROR;
 

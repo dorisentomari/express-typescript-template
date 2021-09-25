@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import glob from 'glob';
 import bluebird from 'bluebird';
 
-import logger from '../helper/logger';
+import logger from '~src/helper/logger';
 
 const initSchemas = () => {
   glob.sync(path.resolve(__dirname, './schemas/', '**/*.schema.ts')).forEach(schema => import(schema));
@@ -20,7 +20,7 @@ const connectMongoDB = async () => {
     useUnifiedTopology: true,
   };
 
-  mongoose.set('debug', process.env.DEBUG);
+  mongoose.set('debug', (process.env.DEBUG as unknown) as boolean);
 
   const HOST = process.env.MONGODB_HOST;
   const PORT = process.env.MONGODB_PORT;

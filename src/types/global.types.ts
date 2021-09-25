@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { HTTP_METHOD } from './http.types';
+import { HTTP_METHOD } from '~src/types/http.types';
 
 export interface IResponseCodeProperty {
   status: number;

@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { IResponseCodeProperty } from '../../types/global.types';
+import { IResponseCodeProperty } from '~src/types/global.types';
 import { IUserResponseCodeProps } from './user.types';
 
 export const MODULE_NAME = 'user';
@@ -13,6 +13,7 @@ export const USER_RESPONSE_CODE: IUserResponseCodeProps<IResponseCodeProperty> =
     phrase: 'EMAIL_EXIST',
     phraseCn: '邮箱已被使用',
   },
+
   WRONG_PASSWORD: {
     status: BAD_REQUEST,
     phrase: 'WRONG_PASSWORD',

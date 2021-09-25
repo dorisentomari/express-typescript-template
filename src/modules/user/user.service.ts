@@ -1,4 +1,4 @@
-import { hashPassword } from '../../helper/utils';
+import { hashPassword } from '~src/helper/utils';
 
 class UserService {
   comparePassword(oldPassword, newPassword): boolean {

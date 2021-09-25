@@ -1,9 +1,11 @@
-import redis from 'redis';
+import * as redis from 'redis';
 import { parseToNumber } from 'easybus';
 
-import { RESPONSE_CODE } from '../config/response-code.config';
+import { RESPONSE_CODE } from '~src/config/response-code.config';
 
-const redisClient = redis.createClient(parseToNumber(process.env.REDIS_PORT), process.env.REDIS_HOST);
+const redisClient = redis.createClient(parseToNumber(process.env.REDIS_PORT), process.env.REDIS_HOST, {
+  db: parseToNumber(process.env.REDIS_DATABASE),
+});
 
 redisClient.on('error', error => {
   console.log(RESPONSE_CODE.REDIS_ERROR.phraseCn);

@@ -1,7 +1,7 @@
 {
   "watch": ["./src/**/*.ts"],
   "ignore": ["./src/**/*.spec.ts"],
-  "exec": "cross-env DEBUG=log:* NODE_ENV=development ts-node --files ./src/index.ts",
+  "exec": "cross-env DEBUG=log:* NODE_ENV=development ts-node -r tsconfig-paths/register --files ./src/index.ts",
   "verbose": true,
   "restartablse": "rs",
   "ext": "js,ts,json"

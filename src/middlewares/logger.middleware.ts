@@ -1,39 +1,48 @@
-import path from 'path';
 import winston from 'winston';
+import path from 'path';
 import expressWinston from 'express-winston';
-import { formatDateTime } from 'easybus';
+import moment from 'moment';
 
-const today = formatDateTime(new Date());
-const normalFileName = `${today}-normal.log`;
-const errorFileName = `${today}-error.log`;
+import paths, { generateLogFile } from '~src/helper/paths';
+
+const currentDay = moment(new Date()).format('YYYY-MM-DD-HH');
+const normalFileName = `${currentDay}-normal.log`;
+const errorFileName = `${currentDay}-error.log`;
 
 const loggerMiddleware = {
   normalLogger: expressWinston.logger({
     transports: [
+
       new winston.transports.File({
         level: 'info',
-        dirname: path.resolve(__dirname, '../../logs'),
         handleExceptions: true,
         maxsize: 5242880,
-        maxFiles: 100,
-        filename: normalFileName,
+        filename: generateLogFile(normalFileName),
+      }),
+
+      new winston.transports.Console({
+        level: 'info',
       }),
     ],
-    meta: true,
+    meta: false,
     msg: 'HTTP {{ req.method }} {{ req.url }}',
     expressFormat: true,
-    colorize: false,
+    colorize: true,
     ignoreRoute: () => false,
     format: winston.format.combine(winston.format.colorize(), winston.format.json()),
   }),
+
   errorLogger: expressWinston.errorLogger({
+
     transports: [
       new winston.transports.File({
-        dirname: path.resolve(__dirname, '../../logs'),
-        filename: errorFileName,
+        dirname: paths.appLog,
+        filename: generateLogFile(errorFileName),
       }),
+
     ],
     format: winston.format.combine(winston.format.colorize(), winston.format.json()),
+
   }),
 };
 

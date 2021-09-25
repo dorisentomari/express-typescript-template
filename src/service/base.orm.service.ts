@@ -1,5 +1,6 @@
-import { Document, Model, Schema, CreateQuery } from 'mongoose';
-import UserMemberModel from '../mongodb/schemas/user-member.schema';
+import { Document, Model, Schema } from 'mongoose';
+
+import UserMemberModel from '~src/mongodb/schemas/user-member.schema';
 
 type ObjectId = Schema.Types.ObjectId;
 
@@ -11,11 +12,11 @@ class BaseOrmService {
     this.model = model;
   }
 
-  public async create<T>(data: CreateQuery<T>): Promise<T> {
+  public async create<T>(data): Promise<T> {
     return this.model.create(data);
   }
 
-  public async createMany<T>(list: Array<CreateQuery<T>>): Promise<Array<T>> {
+  public async createMany<T>(list): Promise<Array<T>> {
     return this.model.insertMany(list);
   }
 
@@ -39,11 +40,11 @@ class BaseOrmService {
     return this.model.find({ _id: { $in: ids } });
   }
 
-  public async findByIdAndUpdate<T>(id: string | ObjectId, data: CreateQuery<T>): Promise<T> {
+  public async findByIdAndUpdate<T>(id: string | ObjectId, data): Promise<T> {
     return this.model.findByIdAndUpdate(id, data);
   }
 
-  public async removeById<T>(id: string | ObjectId, data: CreateQuery<T>): Promise<T> {
+  public async removeById<T>(id: string | ObjectId, data): Promise<T> {
     return this.model.findByIdAndRemove(id, data);
   }
 }

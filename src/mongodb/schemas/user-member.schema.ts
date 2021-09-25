@@ -1,8 +1,8 @@
 import { Schema, model, Document } from 'mongoose';
 import { formatDateTime } from 'easybus';
 
-import { IMONGO_TABLE_NAME, commonFields } from '../types';
-import { IUserGender, IUserStatus } from '../../modules/user/user.types';
+import { IMONGO_TABLE_NAME, commonFields } from '~src/mongodb/types';
+import { IUserGender, IUserStatus } from '~src/modules/user/user.types';
 
 export const UserMemberSchema = new Schema(
   {

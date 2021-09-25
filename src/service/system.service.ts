@@ -1,10 +1,12 @@
 import { formatDateTime, paddingEnd } from 'easybus';
 import chalk from 'chalk';
 
-import { ControllerInterface } from '../types/global.types';
-import { ILayer, IRouteSet } from '../types/express.types';
-import { parseExpressLayerRoute } from '../helper/utils';
-import pkg from '../../package.json';
+import { ControllerInterface } from '~src/types/global.types';
+import { ILayer, IRouteSet } from '~src/types/express.types';
+import { parseExpressLayerRoute } from '~src/helper/utils';
+import paths from '~src/helper/paths';
+
+const pkg = require(paths.appPackageJson);
 
 class SystemService {
   collectionControllers(controllers: Array<ControllerInterface>): Array<IRouteSet> {
